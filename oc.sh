@@ -7,11 +7,14 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Display information about the author, email, and website
-echo "Script by SOROUSH"
-echo "E-Mail: info@hawax.de"
-echo "Website: https://hawax.de"
+echo "========================="
+echo " OpenConnect VPN server with Let's Encrypt SSL certificate"
+echo " Introduction for CentOS7"
+echo " Author: SOROUSH"
+echo " website:www.Techsource.space"
+echo " Telegram: @overnetwork"
 echo ""
-
+echo "========================="
 # Ask for domain and email information
 read -p "Please enter your website domain name: " domain_name
 read -p "Please enter your email address: " owner_email
