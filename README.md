@@ -4,5 +4,5 @@ It prompts the user to enter the domain name and owner email, installs required 
 
 
 git clone https://github.com/hawaxgit/ocserv.git
-cd ocserv && chmod +x oc.sh
+cd ocserv && chmod +x oc.sh &&
 bash oc.sh
