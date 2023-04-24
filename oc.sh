@@ -31,9 +31,11 @@ function display_info {
 }
 
 # Pakete aktualisieren und installieren
-apt-get update -y
-apt-get upgrade -y
-apt-get install ocserv openssl certbot -y
+yum update -y
+yum upgrade -y
+yum install epel-release -y
+yum install ocserv openssl -y
+sudo yum install certbot -y
 
 # Überprüfen, ob alle erforderlichen Pakete installiert sind
 if ! dpkg -s ocserv openssl certbot; then
