@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 # Überprüfen, ob das Skript als Root-Benutzer ausgeführt wird
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
