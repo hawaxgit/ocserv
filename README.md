@@ -4,9 +4,15 @@ It prompts the user to enter the domain name and owner email, installs required 
 
 # Download Script 
 git clone https://github.com/hawaxgit/ocserv.git
+
 #change directory and choise ocserv folder
+
 cd ocserv 
+
 #changes the file permissions of the "oc.sh" file
+
 chmod +x oc.sh 
+
 # Run the Script
+
 bash oc.sh
