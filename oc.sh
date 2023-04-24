@@ -1,53 +1,53 @@
 #!/bin/bash
 
-# Überprüfen, ob das Skript als Root-Benutzer ausgeführt wird
+# Check if the script is being run as root
 if [[ $EUID -ne 0 ]]; then
-   echo "Dieses Skript muss als Root ausgeführt werden" 
+   echo "This script must be run as root" 
    exit 1
 fi
 
-# Informationen zu Arthur, E-Mail und Website anzeigen
+# Display information about the author, email, and website
 echo "Script by SOROUSH"
 echo "E-Mail: info@hawax.de"
 echo "Website: https://hawax.de"
 echo ""
 
-# Nach Domain- und E-Mail-Informationen fragen
-read -p "Geben Sie bitte den Domain-Namen Ihrer Website ein: " domain_name
-read -p "Geben Sie bitte Ihre E-Mail-Adresse ein: " owner_email
+# Ask for domain and email information
+read -p "Please enter your website domain name: " domain_name
+read -p "Please enter your email address: " owner_email
 
-# Variablen
+# Variables
 CERT_DIR="/etc/ocserv/cert"
 
-# Pakete aktualisieren und installieren
+# Update and install packages
 yum update -y
 yum upgrade -y
 yum install epel-release -y
 yum install ocserv openssl -y
 sudo yum install certbot -y
 
-# Überprüfen, ob alle erforderlichen Pakete installiert sind
+# Check if all required packages are installed
 if ! rpm -q ocserv openssl; then
-    echo "Erforderliche Pakete konnten nicht installiert werden"
+    echo "Required packages could not be installed"
     exit 1
 fi
 
-# Zertifikats-Verzeichnis erstellen
+# Create certificate directory
 mkdir -p $CERT_DIR
 
-# Benutzer-Passwort-Datei erstellen
+# Create user password file
 touch /etc/ocserv/ocpasswd
 
-# IP-Weiterleitung aktivieren
+# Enable IP forwarding
 echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
-# SELinux in den "permissive"-Modus versetzen
+# Set SELinux to permissive mode
 setenforce 0
 
-# Zertifikat mit certbot erstellen
+# Create certificate with certbot
 certbot certonly --standalone --non-interactive --agree-tos --email $owner_email -d $domain_name
 
-# Konfigurationsdatei aktualisieren
+# Update configuration file
 cat <<EOF > /etc/ocserv/ocserv.conf
 #auth = "pam"
 auth = "plain[/etc/ocserv/ocpasswd]"
@@ -76,7 +76,6 @@ predictable-ips = true
 ipv4-network = 192.168.1.0
 ipv4-netmask = 255.255.255.0
 dns = 8.8.8.8
-dns = 8.8.4.8
+dns = 8.8.4.4
 route = default
 EOF
-
