@@ -7,9 +7,11 @@ git clone https://github.com/hawaxgit/ocserv.git
 
 #change directory and choise ocserv folder
 
+
 cd ocserv 
 
-#changes the file permissions of the "oc.sh" file
+
+#Changes the file permissions of the "oc.sh" file
 
 chmod +x oc.sh 
 
