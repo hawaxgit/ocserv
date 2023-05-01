@@ -12,7 +12,7 @@ echo " PAM RADIUS authentication setup for ocserv"
 echo " Introduction for CentOS7"
 echo " Author: SOROUSH"
 echo " website:www.hawax.de"
-echo " Telegram: @hawaxit"
+echo " Email: info@hawax.de"
 echo ""
 echo "==================================================="
 # Install required dependencies
