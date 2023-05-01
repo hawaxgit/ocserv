@@ -12,7 +12,7 @@ echo " OpenConnect VPN server with Let's Encrypt SSL certificate"
 echo " Introduction for CentOS7"
 echo " Author: SOROUSH"
 echo " website:www.hawax.de"
-echo " Telegram: @hawaxIT"
+echo " Email: info@hawax.de"
 echo ""
 echo "==================================================="
 # Ask for domain and email information
