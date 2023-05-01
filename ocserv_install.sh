@@ -7,14 +7,14 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Display information about the author, email, and website
-echo "========================="
+echo "==================================================="
 echo " OpenConnect VPN server with Let's Encrypt SSL certificate"
 echo " Introduction for CentOS7"
 echo " Author: SOROUSH"
 echo " website:www.hawax.de"
 echo " Telegram: @overnetwork"
 echo ""
-echo "========================="
+echo "==================================================="
 # Ask for domain and email information
 read -p "Please enter your website domain name: " domain_name
 read -p "Please enter your email address: " owner_email
@@ -23,10 +23,11 @@ read -p "Please enter your email address: " owner_email
 CERT_DIR="/etc/ocserv/cert"
 
 # Update and install packages
-yum update -y
-yum upgrade -y
-yum install epel-release -y
-yum install ocserv openssl -y
+sudo yum update -y
+sudo yum upgrade -y
+sudo yum install nano -y
+sudo yum install epel-release -y
+sudo yum install ocserv openssl -y
 sudo yum install certbot -y
 
 # Check if all required packages are installed
