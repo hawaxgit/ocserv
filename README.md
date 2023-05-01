@@ -7,11 +7,11 @@ It prompts the user to enter the domain name and owner email, installs required 
 ```
 git clone https://github.com/hawaxgit/ocserv.git
 ```
-#change directory and choise ocserv folder
+change directory and choise ocserv folder
 ```
 cd ocserv 
 ```
-#Changes the file permissions of the "oc.sh" file
+Changes the file permissions of the "oc.sh" file
 ```
 chmod +x oc.sh 
 ```
