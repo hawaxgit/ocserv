@@ -29,6 +29,7 @@ sudo yum install nano -y
 sudo yum install epel-release -y
 sudo yum install ocserv openssl -y
 sudo yum install certbot -y
+yum groupinstall "Development Tools"
 
 # Check if all required packages are installed
 if ! rpm -q ocserv openssl; then
