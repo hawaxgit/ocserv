@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#PAM RADIUS authentication setup for ocserv
 # Check if the script is being run as root
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
