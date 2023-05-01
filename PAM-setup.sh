@@ -10,7 +10,7 @@ fi
 echo "==================================================="
 echo " PAM RADIUS authentication setup for ocserv"
 echo " Introduction for CentOS7"
-echo " Author: SOROUSH"
+echo " Author: Hawax IT"
 echo " website:www.hawax.de"
 echo " Email: info@hawax.de"
 echo ""
