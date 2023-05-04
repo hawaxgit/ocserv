@@ -12,7 +12,7 @@ git clone https://github.com/hawaxgit/ocserv.git
 ```
 cd ocserv 
 ```
-# Changes the file permissions of the "oc.sh" file
+# Changes the file permissions of the "ocserv_install.sh" file
 
 ```
 chmod +x ocserv_install.sh
