@@ -16,7 +16,7 @@ echo " Email: info@hawax.de"
 echo ""
 echo "==================================================="
 # Ask for domain and email information
-read -p "Please enter your website domain name: " domain_name
+read -p "Please enter your domain name: " domain_name
 read -p "Please enter your email address: " owner_email
 
 # Variables
