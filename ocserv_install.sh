@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if the script is being run as root
-if [[ $EUID -ne 0 ]]; then
+if [ "$(id -u)" -ne 0 ]; then
    echo "This script must be run as root" 
    exit 1
 fi
@@ -10,7 +10,7 @@ fi
 echo "==================================================="
 echo " OpenConnect VPN server with Let's Encrypt SSL certificate"
 echo " Introduction for CentOS7"
-echo " Author: Hawax IT"
+echo " Author: Soroush Tavanaei (Hawax IT)"
 echo " website:www.hawax.de"
 echo " Email: info@hawax.de"
 echo ""
@@ -23,13 +23,15 @@ read -p "Please enter your email address: " owner_email
 CERT_DIR="/etc/ocserv/cert"
 
 # Update and install packages
-sudo yum update -y
-sudo yum upgrade -y
-sudo yum install nano -y
-sudo yum install epel-release -y
-sudo yum install ocserv openssl -y
-sudo yum install certbot -y
-yum groupinstall "Development Tools"
+install_packages() {
+echo "Updating and installing packages..."
+      sudo yum update -y
+      sudo yum upgrade -y
+      sudo yum install nano -y
+      sudo yum install epel-release -y
+      sudo yum install ocserv openssl -y
+      sudo yum install certbot -y
+      sudo yum groupinstall "Development Tools" -y
 
 # Check if all required packages are installed
 if ! rpm -q ocserv openssl; then
