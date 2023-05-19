@@ -34,7 +34,8 @@ install_packages() {
     sudo yum install epel-release -y
     sudo yum install ocserv openssl -y
     sudo yum install certbot -y
-    yum groupinstall "Development Tools"
+    sudo yum install firewalld -y
+    yum groupinstall "Development Tools" -y
 
     # Check if all required packages are installed
     if ! rpm -q ocserv openssl; then
@@ -94,7 +95,29 @@ create_vpn_user() {
     echo "VPN user created successfully"
 }
 
+# Function to configure firewall
+configure_firewall() {
+    echo "Configuring firewall..."
+    sudo systemctl start firewalld
+    sudo systemctl enable firewalld
+    sudo firewall-cmd --add-masquerade
+    sudo firewall-cmd --permanent --add-masquerade
+    sudo firewall-cmd --zone=public --add-service={http,https} --permanent
+    sudo firewall-cmd --zone=public --add-port=22/tcp --permanent
+    sudo firewall-cmd --zone=public --add-port=22/udp --permanent
+    sudo firewall-cmd --zone=public --add-port=510/tcp --permanent
+    sudo firewall-cmd --zone=public --add-port=510/udp --permanent
+    sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
+    sudo firewall-cmd --zone=public --add-port=80/udp --permanent
+    sudo firewall-cmd --zone=public --add-port=443/tcp --permanent
+    sudo firewall-cmd --zone=public --add-port=443/udp --permanent
+    sudo firewall-cmd --reload
+    echo "Firewall configured successfully"
+}
+
 # Main script
+systemctl enable ocserv
+systemctl restart ocserv
 
 # Install packages
 install_packages
