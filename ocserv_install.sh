@@ -10,49 +10,38 @@ fi
 echo "==================================================="
 echo " OpenConnect VPN server with Let's Encrypt SSL certificate"
 echo " Introduction for CentOS7"
-echo " Author: Soroush Tavanaei (Hawax IT)"
+echo " Author: Soroush at Hawax IT"
 echo " website:www.hawax.de"
 echo " Email: info@hawax.de"
 echo ""
 echo "==================================================="
-# Ask for domain and email information
+
+# Ask for domain, email, and username information
 read -p "Please enter your domain name: " domain_name
 read -p "Please enter your email address: " owner_email
 read -p "Please enter the username for the VPN user: " vpn_username
 
-
 # Variables
 CERT_DIR="/etc/ocserv/cert"
-
-# Update and install packages
-install_packages() {
-echo "Updating and installing packages..."
-      sudo yum update -y
-      sudo yum upgrade -y
-      sudo yum install nano -y
-      sudo yum install epel-release -y
-      sudo yum install ocserv openssl -y
-      sudo yum install certbot -y
-      sudo yum groupinstall "Development Tools" -y
-
-# Check if all required packages are installed
-if ! rpm -q ocserv openssl; then
-    echo "Required packages could not be installed"
-    exit 1
-fi
-
-# Create certificate directory
-mkdir -p $CERT_DIR
-
-# Create user password file
-touch /etc/ocserv/ocpasswd
 OCPASSWD_FILE="/etc/ocserv/ocpasswd"
 
-# Enable IP forwarding
-echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+# Function to install packages
+install_packages() {
+    echo "Updating and installing packages..."
+    sudo yum update -y
+    sudo yum upgrade -y
+    sudo yum install nano -y
+    sudo yum install epel-release -y
+    sudo yum install ocserv openssl -y
+    sudo yum install certbot -y
+    yum groupinstall "Development Tools"
 
-# Set SELinux to permissive mode
-setenforce 0
+    # Check if all required packages are installed
+    if ! rpm -q ocserv openssl; then
+        echo "Required packages could not be installed"
+        exit 1
+    fi
+}
 
 # Function to create certificate
 create_certificate() {
@@ -105,8 +94,30 @@ create_vpn_user() {
     echo "VPN user created successfully"
 }
 
+# Main script
+
+# Install packages
+install_packages
+
+# Create certificate directory
+mkdir -p "$CERT_DIR"
+
+# Create user password file
+touch "$OCPASSWD_FILE"
+
+# Enable IP forwarding
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+# Set SELinux to permissive mode
+setenforce 0
+
+# Create certificate with certbot
+create_certificate
+
 # Update configuration file
 update_config_file
 
-echo "Script completed successfully"
+# Create VPN user
+create_vpn_user
 
+echo "Script completed successfully"
