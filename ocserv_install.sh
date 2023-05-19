@@ -46,6 +46,7 @@ mkdir -p $CERT_DIR
 
 # Create user password file
 touch /etc/ocserv/ocpasswd
+OCPASSWD_FILE="/etc/ocserv/ocpasswd"
 
 # Enable IP forwarding
 echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -100,10 +101,12 @@ create_vpn_user() {
     echo "Creating VPN user..."
     read -s -p "Please enter the password for the VPN user: " vpn_password
     echo
-    echo "$vpn_username:$vpn_password" | sudo chpasswd
+    echo "$vpn_username:$vpn_password" >> "$OCPASSWD_FILE"
+    echo "VPN user created successfully"
 }
 
 # Update configuration file
 update_config_file
 
 echo "Script completed successfully"
+
