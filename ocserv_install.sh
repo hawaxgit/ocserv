@@ -19,7 +19,6 @@ echo "==================================================="
 # Ask for domain, email, and username information
 read -p "Please enter your domain name: " domain_name
 read -p "Please enter your email address: " owner_email
-read -p "Please enter the username for the VPN user: " vpn_username
 
 # Variables
 CERT_DIR="/etc/ocserv/cert"
@@ -89,9 +88,11 @@ EOF
 # Function to create VPN user
 create_vpn_user() {
     echo "Creating VPN user..."
+    read -p "Please enter the username for the VPN user: " vpn_username
     read -s -p "Please enter the password for the VPN user: " vpn_password
     echo
-    echo "$vpn_username:$vpn_password" >> "$OCPASSWD_FILE"
+    vpn_password_hash=$(openssl passwd -1 "$vpn_password")
+    echo "$vpn_username:$vpn_password_hash" >> "/etc/ocserv/ocpasswd"
     echo "VPN user created successfully"
 }
 
