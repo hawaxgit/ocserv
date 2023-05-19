@@ -18,6 +18,8 @@ echo "==================================================="
 # Ask for domain and email information
 read -p "Please enter your domain name: " domain_name
 read -p "Please enter your email address: " owner_email
+read -p "Please enter the username for the VPN user: " vpn_username
+
 
 # Variables
 CERT_DIR="/etc/ocserv/cert"
@@ -51,11 +53,16 @@ echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 # Set SELinux to permissive mode
 setenforce 0
 
-# Create certificate with certbot
-certbot certonly --standalone --non-interactive --agree-tos --email $owner_email -d $domain_name
+# Function to create certificate
+create_certificate() {
+    echo "Creating certificate with certbot..."
+    certbot certonly --standalone --non-interactive --agree-tos --email "$owner_email" -d "$domain_name"
+}
 
-# Update configuration file
-cat <<EOF > /etc/ocserv/ocserv.conf
+# Function to update configuration file
+update_config_file() {
+    echo "Updating configuration file..."
+    cat <<EOF > /etc/ocserv/ocserv.conf
 #auth = "pam"
 auth = "plain[/etc/ocserv/ocpasswd]"
 tcp-port = 510
@@ -86,3 +93,17 @@ dns = 8.8.8.8
 dns = 8.8.4.4
 route = default
 EOF
+}
+
+# Function to create VPN user
+create_vpn_user() {
+    echo "Creating VPN user..."
+    read -s -p "Please enter the password for the VPN user: " vpn_password
+    echo
+    echo "$vpn_username:$vpn_password" | sudo chpasswd
+}
+
+# Update configuration file
+update_config_file
+
+echo "Script completed successfully"
