@@ -16,7 +16,7 @@ display_menu() {
     echo "===============<Hawax>================"
     echo " OpenConnect VPN server configuration"
     echo "======================================"
-    echo "1. Install One Touch Ocserv VPN"
+    echo "1. OneClick Installation OpenConnect VPN"
     echo "2. Create VPN user"
     echo "3. Renew SSL certificate"
     echo "4. Configure Radius and PAM authentication"
