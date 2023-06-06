@@ -20,9 +20,18 @@ display_menu() {
     echo "2. Create VPN user"
     echo "3. Renew SSL certificate"
     echo "4. Configure Radius and PAM authentication"
-    echo "5. Exit"
+    echo "5. Delete VPN user"   # New option for deleting a VPN user
+    echo "6. Exit"   # Updated option for exiting the script
     echo "======================================"
-    read -p "Please choose an option [1-5]: " menu_option
+    read -p "Please choose an option [1-6]: " menu_option
+}
+
+# Function to delete VPN user
+delete_vpn_user() {
+    echo "Deleting VPN user..."
+    read -p "Please enter the username of the VPN user to delete: " vpn_username
+    sed -i "/^$vpn_username:.*$/d" "$OCPASSWD_FILE"
+    echo "VPN user deleted successfully"
 }
 
 # Function to create VPN user
@@ -246,6 +255,8 @@ case "$menu_option" in
     2) create_vpn_user ;;
     3) renew_ssl_certificate ;;
     4) configure_radius_pam_auth ;;
-    5) exit 0 ;;
+    5) delete_vpn_user ;;   # New case for deleting a VPN user
+    6) exit 0 ;;   # Updated case for exiting the script
     *) echo "Invalid option. Please choose a valid option." ;;
 esac
+
