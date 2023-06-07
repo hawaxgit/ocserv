@@ -15,10 +15,10 @@ cd ocserv
 # Changes the file permissions of the "ocserv_install.sh" file
 
 ```
-chmod +x ocserv_install.sh
+chmod +x oc.sh
 ```
 # Run the Script
 
 ```
-bash ocserv_install.sh
+bash oc.sh
 ```
