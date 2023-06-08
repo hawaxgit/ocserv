@@ -22,7 +22,7 @@ chmod +x oc.sh
 ```
 bash oc.sh
 ```
-# For systems using the systemd init manager after ocserv instalaltion:
+# Start ocserv service using the systemd init manager after ocserv instalaltion:
 
 ```
 sudo systemctl start ocserv
