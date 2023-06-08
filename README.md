@@ -5,7 +5,7 @@ It prompts the user to enter the domain name and owner email, installs required 
 # Download Script 
 
 ```
-git clone https://github.com/hawaxgit/ocserv.git
+sudo git clone https://github.com/hawaxgit/ocserv.git
 ```
 # change directory and choise ocserv folder
 
@@ -15,12 +15,12 @@ cd ocserv
 # Changes the file permissions of the "ocserv_install.sh" file
 
 ```
-chmod +x oc.sh
+sudo chmod +x oc.sh
 ```
 # Run the Script
 
 ```
-bash oc.sh
+sudo bash oc.sh
 ```
 # Start ocserv service using the systemd init manager after ocserv instalaltion:
 
