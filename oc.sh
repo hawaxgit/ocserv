@@ -21,10 +21,32 @@ display_menu() {
     echo "3. Renew SSL certificate"
     echo "4. Configure Radius and PAM authentication"
     echo "5. Delete VPN user"
-    echo "6. Show VPN users"   # New option for showing VPN users
-    echo "7. Exit"   # Updated option for exiting the script
+    echo "6. Show VPN users"
+    echo "7. Uninstall Ocserv and related components"   # New option for uninstalling
+    echo "8. Exit"   # Updated option for exiting the script
     echo "======================================"
-    read -p "Please choose an option [1-7]: " menu_option
+    read -p "Please choose an option [1-8]: " menu_option
+}
+
+# Function to uninstall Ocserv and related components
+uninstall_ocserv() {
+    echo "Uninstalling Ocserv and related components..."
+    echo "Stopping Ocserv..."
+    systemctl stop ocserv
+    echo "Disabling Ocserv..."
+    systemctl disable ocserv
+    echo "Removing Ocserv..."
+    yum remove ocserv -y
+    echo "Removing dependencies..."
+    yum autoremove -y
+    echo "Stopping firewalld..."
+    systemctl stop firewalld
+    echo "Disabling firewalld..."
+    systemctl disable firewalld
+    echo "Removing firewalld..."
+    yum remove firewalld -y
+    echo "Uninstallation complete"
+    read -p "Press Enter to continue..."
 }
 
 # Function to show VPN users
@@ -266,8 +288,10 @@ case "$menu_option" in
     3) renew_ssl_certificate ;;
     4) configure_radius_pam_auth ;;
     5) delete_vpn_user ;;
-    6) show_vpn_users ;;   # New case for showing VPN users
-    7) exit 0 ;;   # Updated case for exiting the script
+    6) show_vpn_users ;;
+    7) uninstall_ocserv ;;   # New case for uninstalling Ocserv
+    8) exit 0 ;;   # Updated case for exiting the script
     *) echo "Invalid option. Please choose a valid option." ;;
 esac
+
 
