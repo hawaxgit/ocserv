@@ -240,8 +240,8 @@ EOF
         sudo firewall-cmd --add-masquerade
         sudo firewall-cmd --permanent --add-masquerade
         sudo firewall-cmd --zone=public --add-service={http,https} --permanent
-        sudo firewall-cmd --zone=public --add-port={22,443,510}/tcp --permanent
-        sudo firewall-cmd --zone=public --add-port={22,443,510}/udp --permanent
+        sudo firewall-cmd --zone=public --add-port={22,80,443,510}/tcp --permanent
+        sudo firewall-cmd --zone=public --add-port={22,80,443,510}/udp --permanent
         sudo firewall-cmd --reload
         echo "Firewall configured successfully"
     }
