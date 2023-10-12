@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check the script is being run as root
+# Check if the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
    echo "This script must be run as root" 
    exit 1
@@ -14,18 +14,19 @@ OCPASSWD_FILE="/etc/ocserv/ocpasswd"
 display_menu() {
     clear
     echo "===============<Hawax>================"
-    echo " OpenConnect VPN server configuration"
+    echo " OpenConnect VPN Server Configuration"
     echo "======================================"
-    echo "1. OneClick Installation OpenConnect VPN"
-    echo "2. Create VPN user"
-    echo "3. Renew SSL certificate"
-    echo "4. Configure Radius and PAM authentication"
-    echo "5. Delete VPN user"
-    echo "6. Show VPN users"
-    echo "7. Uninstall Ocserv and related components"   # New option for uninstalling
-    echo "8. Exit"   # Updated option for exiting the script
+    echo "1. One-Click Installation of OpenConnect VPN"
+    echo "2. Create VPN User"
+    echo "3. Renew SSL Certificate"
+    echo "4. Configure Radius and PAM Authentication"
+    echo "5. Install radcli for RADIUS Support"
+    echo "6. Delete VPN User"
+    echo "7. Show VPN Users"
+    echo "8. Uninstall Ocserv and Related Components"
+    echo "9. Exit"
     echo "======================================"
-    read -p "Please choose an option [1-8]: " menu_option
+    read -p "Please choose an option [1-9]: " menu_option
 }
 
 # Function to uninstall Ocserv and related components
@@ -82,25 +83,31 @@ renew_ssl_certificate() {
     echo "SSL certificate renewed successfully"
 }
 
+#...
 # Function to configure Radius and PAM authentication
 configure_radius_pam_auth() {
     echo "Configuring Radius and PAM authentication..."
-    # PAM RADIUS authentication setup for ocserv
-    # Check if the script is being run as root
-    if [[ $EUID -ne 0 ]]; then
-       echo "This script must be run as root" 
-       exit 1
-    fi
 
     # Display information about the author, email, and website
     echo "==================================================="
     echo " PAM RADIUS authentication setup for ocserv"
     echo " Introduction for CentOS7"
     echo " Author: Hawax IT"
-    echo " website:www.hawax.de"
+    echo " Website: www.hawax.de"
     echo " Email: info@hawax.de"
-    echo ""
     echo "==================================================="
+
+    #...
+}
+
+#...
+# Main script
+install_packages() {
+    echo "Updating and installing packages..."
+    #...
+}
+
+#...
 
     # Install required dependencies
     yum install autoconf automake gcc libtasn1-devel zlib zlib-devel trousers trousers-devel gmp-devel gmp xz texinfo libnl-devel libnl tcp_wrappers-libs tcp_wrappers-devel tcp_wrappers dbus dbus-devel ncurses-devel pam-devel readline-devel bison bison-devel flex gcc automake autoconf wget -y
@@ -272,26 +279,39 @@ EOF
     # Konfigurationsdatei aktualisieren
     update_config_file
 
-    # Firewall konfigurieren
+    # Firewall Configuration
     configure_firewall
 
     echo "OpenConnect SSL VPN installed successfully"
 }
 
-# Hauptmenü
-display_menu
+# Function to install radcli for RADIUS support
+install_radcli() {
+    echo "Installing radcli for RADIUS support..."
+    yum install -y radcli
+    if [ $? -eq 0 ]; then
+        echo "radcli successfully installed!"
+    else
+        echo "Failed to install radcli."
+    fi
+    read -p "Press Enter to continue..."
+}
 
-# Menüoptionen auswerten
-case "$menu_option" in
-    1) install_one_touch_vpn ;;
-    2) create_vpn_user ;;
-    3) renew_ssl_certificate ;;
-    4) configure_radius_pam_auth ;;
-    5) delete_vpn_user ;;
-    6) show_vpn_users ;;
-    7) uninstall_ocserv ;;   # New case for uninstalling Ocserv
-    8) exit 0 ;;   # Updated case for exiting the script
-    *) echo "Invalid option. Please choose a valid option." ;;
-esac
+# Main menu loop
+while true; do
+    display_menu
 
-
+    # Evaluate menu options
+    case "$menu_option" in
+        1) install_one_touch_vpn ;;
+        2) create_vpn_user ;;
+        3) renew_ssl_certificate ;;
+        4) configure_radius_pam_auth ;;
+        5) install_radcli ;;
+        6) delete_vpn_user ;;
+        7) show_vpn_users ;;
+        8) uninstall_ocserv ;;
+        9) echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid option. Please choose a valid option." ;;
+    esac
+done
