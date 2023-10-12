@@ -206,8 +206,10 @@ install_one_touch_vpn() {
     update_config_file() {
         echo "Updating the configuration file..."
         cat <<EOF > /etc/ocserv/ocserv.conf
-#auth = "pam"
 auth = "plain[/etc/ocserv/ocpasswd]"
+#auth = "radius [config=/usr/local/etc/radcli/radiusclient.conf,groupconfig=true]"
+#acct = "radius [config=/usr/local/etc/radcli/radiusclient.conf,groupconfig=true]"
+#auth = "pam"
 tcp-port = 510
 udp-port = 510
 run-as-user = nobody
