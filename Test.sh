@@ -1,4 +1,12 @@
 #!/bin/bash
+####################################################
+#                                                  #
+# This is a ocserv installation for CentOS 7       #
+# Version: 1.2.2                                   #
+# Author: Soroush Tavanaei                         #
+# Website: https://www.hawax.de                    #
+#                                                  #
+####################################################
 
 # Check if the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
