@@ -1,5 +1,12 @@
 #!/bin/bash
-
+####################################################
+#                                                  #
+# This is a ocserv installation for CentOS 7       #
+# Version: 1.2.2                                   #
+# Author: Soroush Tavanaei                         #
+# Github: https://www.github.com/hawaxgit          #
+#                                                  #
+####################################################
 # Check if the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
    echo "This script must be run as root" 
