@@ -3,7 +3,7 @@
 #                                                  #
 # This is a ocserv installation for CentOS 7       #
 # Version: 1.2.2                                   #
-# Author: Soroush Tavanaei                         #
+# Author: Soroush                                  #
 # Github: https://www.github.com/hawaxgit          #
 #                                                  #
 ####################################################
