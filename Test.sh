@@ -1,34 +1,13 @@
 #!/bin/bash
 
-# Check the script is being run as root
-if [ "$(id -u)" -ne 0 ]; then
-   echo "This script must be run as root" 
-   exit 1
-fi
-
-# Variables
-CERT_DIR="/etc/ocserv/cert"
-OCPASSWD_FILE="/etc/ocserv/ocpasswd"
-FIREWALL="ufw"  # Choose either "ufw" or "iptables" for firewall configuration
-
-# Function to display the menu
-display_menu() {
-    clear
-    echo "===============<Hawax>================"
-    echo " OpenConnect VPN server configuration"
-    echo "======================================"
-    echo "1. OneClick Installation OpenConnect VPN"
-    echo "2. Create VPN user"
-    echo "3. Renew SSL certificate"
-    echo "4. Delete VPN user"
-    echo "5. Show VPN users"
-    echo "6. Uninstall Ocserv and related components"
-    echo "7. Exit"
-    echo "======================================"
-    read -p "Please choose an option [1-7]: " menu_option
+# Funktion zum Ermitteln der ausgehenden Netzwerkschnittstelle
+get_outgoing_interface() {
+    # Ermittle die ausgehende Netzwerkschnittstelle anhand der Standardroute
+    interface=$(ip route | grep default | awk '{print $5}')
+    echo "$interface"
 }
 
-# Function to uninstall Ocserv and related components
+# Funktion zum Deinstallieren von Ocserv und zugehörigen Komponenten
 uninstall_ocserv() {
     echo "Uninstalling Ocserv and related components..."
     echo "[  OK  ] Stopping Ocserv..."
@@ -47,11 +26,11 @@ uninstall_ocserv() {
         iptables -D INPUT -p tcp --dport 510 -j ACCEPT
         iptables -D INPUT -p udp --dport 510 -j ACCEPT
     fi
-    echo "Uninstallation complete"
+    echo "[  OK  ] Uninstallation complete"
     read -p "Press Enter to continue..."
 }
 
-# Function to show VPN users
+# Funktion zum Anzeigen der VPN-Benutzer
 show_vpn_users() {
     echo "VPN users:"
     echo "-----------"
@@ -60,15 +39,15 @@ show_vpn_users() {
     read -p "Press Enter to continue..."
 }
 
-# Function to delete VPN user
+# Funktion zum Löschen eines VPN-Benutzers
 delete_vpn_user() {
     echo "Deleting VPN user..."
     read -p "Please enter the username of the VPN user to delete: " vpn_username
     sed -i "/^$vpn_username:.*$/d" "$OCPASSWD_FILE"
-    echo "VPN user deleted successfully"
+    echo "[  OK  ] VPN user deleted successfully"
 }
 
-# Function to create VPN user
+# Funktion zum Erstellen eines VPN-Benutzers
 create_vpn_user() {
     echo "Creating VPN user..."
     read -p "Please enter the username for the VPN user: " vpn_username
@@ -76,7 +55,7 @@ create_vpn_user() {
     echo "VPN user created successfully"
 }
 
-# Function to renew SSL certificate
+# Funktion zum Erneuern des SSL-Zertifikats
 renew_ssl_certificate() {
     echo "Renewing SSL certificate..."
     certbot renew
@@ -84,7 +63,7 @@ renew_ssl_certificate() {
     echo "[  OK  ] SSL certificate renewed successfully"
 }
 
-# Function to install One Touch Ocserv VPN
+# Funktion zum Installieren des One Touch Ocserv VPN
 install_one_touch_vpn() {
     echo "Installing One Touch Ocserv VPN..."
     # Add your installation steps for One Touch Ocserv VPN here
@@ -169,35 +148,33 @@ EOF
         echo "[  OK  ] Configuration file updated successfully"
     }
 
-# Funktion zum Konfigurieren der Firewall
-configure_firewall() {
-    echo "Configuring the firewall..."
-    if [ "$FIREWALL" = "ufw" ]; then
-        ufw allow 510/tcp
-        ufw allow 510/udp
-        ufw enable
-        ufw default allow outgoing
-    elif [ "$FIREWALL" = "iptables" ]; then
-        iptables -A INPUT -p tcp --dport 510 -j ACCEPT
-        iptables -A INPUT -p udp --dport 510 -j ACCEPT
-        iptables-save > /etc/iptables/rules.v4
-        interface=$(get_outgoing_interface)
-        iptables -t nat -A POSTROUTING -o "$interface" -j MASQUERADE
-        apt install iptables-persistent -y
-        systemctl enable netfilter-persistent
-        systemctl start netfilter-persistent
-    fi
-    echo "[  OK  ] Firewall configured successfully"
-}
-
+    # Funktion zum Konfigurieren der Firewall
+    configure_firewall() {
+        echo "Configuring the firewall..."
+        if [ "$FIREWALL" = "ufw" ]; then
+            ufw allow 510/tcp
+            ufw allow 510/udp
+            ufw enable
+            ufw default allow outgoing
+        elif [ "$FIREWALL" = "iptables" ]; then
+            iptables -A INPUT -p tcp --dport 510 -j ACCEPT
+            iptables -A INPUT -p udp --dport 510 -j ACCEPT
+            iptables-save > /etc/iptables/rules.v4
+            interface=$(get_outgoing_interface)
+            iptables -t nat -A POSTROUTING -o "$interface" -j MASQUERADE
+            apt install iptables-persistent -y
+            systemctl enable netfilter-persistent
+            systemctl start netfilter-persistent
+        fi
+        echo "[  OK  ] Firewall configured successfully"
+    }
 
     # Funktion zum Ermitteln der ausgehenden Netzwerkschnittstelle
-get_outgoing_interface() {
-    # Ermittle die ausgehende Netzwerkschnittstelle anhand der Standardroute
-    interface=$(ip route | grep default | awk '{print $5}')
-    echo "$interface"
-}
-
+    get_outgoing_interface() {
+        # Ermittle die ausgehende Netzwerkschnittstelle anhand der Standardroute
+        interface=$(ip route | grep default | awk '{print $5}')
+        echo "$interface"
+    }
 
     # Hauptskript
     systemctl enable ocserv
@@ -225,20 +202,37 @@ get_outgoing_interface() {
     # Firewall konfigurieren
     configure_firewall
 
-    echo "OpenConnect SSL VPN installed successfully"
+    echo "[  OK  ] OpenConnect SSL VPN installed successfully"
 }
 
 # Hauptmenü
-display_menu
+display_menu() {
+    clear
+    echo "===============<Hawax>================"
+    echo " OpenConnect VPN server configuration"
+    echo "======================================"
+    echo "1. Install One Touch Ocserv VPN"
+    echo "2. Create VPN user"
+    echo "3. Renew SSL certificate"
+    echo "4. Delete VPN user"
+    echo "5. Show VPN users"
+    echo "6. Uninstall Ocserv and related components"
+    echo "7. Exit"
+    echo "======================================"
+    read -p "Please choose an option [1-7]: " menu_option
+}
 
 # Menüoptionen auswerten
-case "$menu_option" in
-    1) install_one_touch_vpn ;;
-    2) create_vpn_user ;;
-    3) renew_ssl_certificate ;;
-    4) delete_vpn_user ;;
-    5) show_vpn_users ;;
-    6) uninstall_ocserv ;;
-    7) exit 0 ;;
-    *) echo "Invalid option. Please choose a valid option." ;;
-esac
+while true; do
+    display_menu
+    case "$menu_option" in
+        1) install_one_touch_vpn ;;
+        2) create_vpn_user ;;
+        3) renew_ssl_certificate ;;
+        4) delete_vpn_user ;;
+        5) show_vpn_users ;;
+        6) uninstall_ocserv ;;
+        7) exit 0 ;;
+        *) echo "Invalid option. Please choose a valid option." ;;
+    esac
+done
